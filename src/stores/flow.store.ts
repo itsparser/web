@@ -15,10 +15,29 @@ import {
 } from "reactflow";
 import { create } from "zustand";
 
+const NODE_TYPES = {
+  newNode: { width: 28, height: 30 },
+  actionNode: { width: 384, height: 40 },
+  conditionalNode: { width: 384, height: 40 },
+  endloop: { width: 28, height: 30 },
+  loop: { width: 384, height: 40 }
+};
+
+const GRAPH_SETTINGS = {
+  rankdir: "TB",
+  ranker: "longest-path",
+  nodesep: 500,
+  edgesep: 0,
+  marginx: 30,
+  marginy: 20,
+  ranksep: 60
+};
+
 export const flowStateSelector = (state: RFState) => ({
   nodes: state.nodes,
   edges: state.edges,
   graph: state.graph,
+  currentNode: state.currentNode,
   setGraph: state.setGraph,
   onNodesChange: state.onNodesChange,
   onEdgesChange: state.onEdgesChange,
@@ -26,6 +45,7 @@ export const flowStateSelector = (state: RFState) => ({
   setNodes: state.setNodes,
   setEdges: state.setEdges,
   rearrangeNodePosition: state.rearrangeNodePosition,
+  setCurrentNode: state.setCurrentNode,
   reset: state.reset
 });
 
@@ -33,6 +53,7 @@ export type RFState = {
   nodes: Node<any>[];
   edges: Edge[];
   graph: any[];
+  currentNode: any;
   onNodesChange: OnNodesChange;
   onEdgesChange: OnEdgesChange;
   onConnect: OnConnect;
@@ -41,12 +62,14 @@ export type RFState = {
   setGraph: (graph: any[]) => void;
   rearrangeNodePosition: () => void;
   addNewNode: (nodes: Node[]) => void;
+  setCurrentNode: (node: any) => void;
   reset: () => void;
 };
 const intialStoreValue = {
   graph: [],
   nodes: [],
-  edges: []
+  edges: [],
+  currentNode: {}
 };
 
 // this is our useStore hook that we can use in our components to get parts of the store and call actions
@@ -55,6 +78,10 @@ export const useFlowStore = create<RFState>((set, get) => ({
 
   reset: () => {
     set({ ...intialStoreValue });
+  },
+
+  setCurrentNode: (node: any) => {
+    set({ currentNode: node });
   },
 
   setGraph: (graph: any[]) => {
@@ -107,7 +134,7 @@ export const useFlowStore = create<RFState>((set, get) => ({
 
     let sizeMatrix: any = {
       newNode: { width: 28, height: 30 },
-      actionNode: { width: 176, height: 40 },
+      actionNode: { width: 384, height: 40 },
       conditionalNode: { width: 384, height: 40 },
       endloop: { width: 28, height: 30 },
       loop: { width: 384, height: 40 }

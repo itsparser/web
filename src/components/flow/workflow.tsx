@@ -40,10 +40,11 @@ export const Workflow: React.FC<WorkflowParam> = ({
   ...restProps
 }) => {
   const getLayoutedElements = (nodes: Array<any>, edges: Array<any>): any => {};
-  const { nodes, edges } = useFlowStore(
+  const { nodes, edges, currentNode } = useFlowStore(
     (state: RFState) => ({
       nodes: state.nodes,
-      edges: state.edges
+      edges: state.edges,
+      currentNode: state.currentNode
     }),
     shallow
   );
@@ -56,7 +57,7 @@ export const Workflow: React.FC<WorkflowParam> = ({
   }, []);
   return (
     <div className="flex h-dvh w-full flex-row">
-      <div className="basis-3/4 border border-indigo-500/20">
+      <div className="basis-3/4 flex-1 border border-indigo-500/20">
         <ReactFlow
           nodes={nodes}
           edges={edges}
@@ -76,9 +77,13 @@ export const Workflow: React.FC<WorkflowParam> = ({
           />
         </ReactFlow>
       </div>
-      <div className="basis-1/4 border border-indigo-500/20">
-        <WorkflowForm title={"Righ Column"} />
-      </div>
+      {currentNode?.id != undefined ? (
+        <div className="basis-1/4 border border-indigo-500/20">
+          <WorkflowForm title={"Righ Column"} />
+        </div>
+      ) : (
+        ""
+      )}
     </div>
   );
 };

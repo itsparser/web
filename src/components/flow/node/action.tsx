@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { NodeProps, Position, useNodeId } from "reactflow";
+import { useFlowStore } from "stores/flow.store";
 import { classNames } from "..";
 import CustomHandle from "../handler/test";
 
@@ -25,11 +26,14 @@ export const ActionNode: React.FC<NodeProps> = ({ data, xPos, yPos }) => {
       />
       <div
         className={classNames(
-          "h-10 w-44 border-white rounded-lg shadow-sm hover:shadow-md",
+          "w-96 h-10 border-white rounded-lg shadow-sm hover:shadow-md",
           bgColor
         )}
       >
-        <div className="self-center p-2 align-middle text-center ">
+        <div
+          className="self-center p-2 align-middle text-center "
+          onClick={() => useFlowStore.getState().setCurrentNode(data?.payload)}
+        >
           [ {data?.payload?.type_field} ] - {data?.payload?.name}
         </div>
       </div>

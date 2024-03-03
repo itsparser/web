@@ -18,7 +18,6 @@ import { v4 as uuidv4 } from "uuid";
 
 export const ActionGroup: React.FC = () => {
   const [dataSource, setDataSource] = useState([] as any);
-  const [updateData, setupdateData] = useState({} as any);
   const [savedData, setSavedData] = useState({ data_kind: "Static" } as object);
   const { appId = "", actionGroupId = "" } = useParams();
 
