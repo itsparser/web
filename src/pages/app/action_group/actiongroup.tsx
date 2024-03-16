@@ -1,3 +1,4 @@
+import { Select as OSelect } from "@/components/select";
 import { ArrowsPointingInIcon } from "@heroicons/react/20/solid";
 import {
   ArrowDownTrayIcon,
@@ -6,13 +7,13 @@ import {
 import { Button } from "@material-tailwind/react";
 import { InputGroup } from "components/input";
 import { PageHeader } from "components/page_header";
-import { Select as OSelect } from "components/select";
 import EditableTable from "components/table/edit";
 import { ActionKindV2 } from "constant/action_kind";
 import { TargetV2 } from "constant/target";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Service } from "service";
+import { fetchActions, saveBatch } from "service/app";
 import { Endpoint } from "service/endpoint";
 import { v4 as uuidv4 } from "uuid";
 
@@ -36,32 +37,32 @@ export const ActionGroup: React.FC = () => {
   /**
    * fetchActions - will get all the Action for specific action group
    */
-  const fetchActions = async () => {
-    await Service.get(`${Endpoint.v1.action.list(appId, actionGroupId)}`)
-      .then((actions) => {
-        setDataSource(actions);
-        console.log(actions);
-      })
-      .finally(() => {
-        // all the fallback code will come here
-      });
-  };
+  // const fetchActions = async () => {
+  //   await Service.get(`${Endpoint.v1.action.list(appId, actionGroupId)}`)
+  //     .then((actions) => {
+  //       setDataSource(actions);
+  //       console.log(actions);
+  //     })
+  //     .finally(() => {
+  //       // all the fallback code will come here
+  //     });
+  // };
 
-  /**
-   * saveBatch - will save all the value
-   */
-  const saveBatch = async () => {
-    await Service.post(`${Endpoint.v1.action.batch(appId, actionGroupId)}`, {
-      body: dataSource
-    })
-      .then((actions) => {
-        // setDataSource(actions);
-        console.log(actions);
-      })
-      .finally(() => {
-        // all the fallback code will come here
-      });
-  };
+  // /**
+  //  * saveBatch - will save all the value
+  //  */
+  // const saveBatch = async () => {
+  //   await Service.post(`${Endpoint.v1.action.batch(appId, actionGroupId)}`, {
+  //     body: dataSource
+  //   })
+  //     .then((actions) => {
+  //       // setDataSource(actions);
+  //       console.log(actions);
+  //     })
+  //     .finally(() => {
+  //       // all the fallback code will come here
+  //     });
+  // };
 
   const addNewRow = async () => {
     let _uuid = uuidv4();
@@ -85,20 +86,10 @@ export const ActionGroup: React.FC = () => {
   };
 
   useEffect(() => {
-    fetchActions();
+    fetchActions(appId, actionGroupId).then((actions) => {
+      setDataSource(actions);
+    });
   }, []);
-
-  const handleAddRows = () => {
-    setDataSource([
-      ...dataSource,
-      {
-        key: "1",
-        command: "click",
-        target: "Kissflow First Action Group",
-        value: "on click data need to load"
-      }
-    ]);
-  };
 
   return (
     <div className="h-full">
@@ -110,7 +101,7 @@ export const ActionGroup: React.FC = () => {
             <Button
               variant="gradient"
               className="flex items-center gap-3"
-              onClick={() => saveBatch()}
+              onClick={() => saveBatch(appId, actionGroupId, dataSource)}
               color="indigo"
             >
               <ArrowDownTrayIcon className="size-4" /> Save

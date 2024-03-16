@@ -1,12 +1,21 @@
-import React, { useEffect, useState } from "react";
-import { Space, Table, Button, Popconfirm } from "antd";
+import { PlusOutlined } from "@ant-design/icons";
+import { Popconfirm, Space, Table } from "antd";
 import type { ColumnsType } from "antd/es/table";
+import { CreateModal } from "components/create_modal";
+import { PageHeader } from "components/page_header";
+import { Button } from "orca/components/ui/button";
+import { Input } from "orca/components/ui/input";
+import { Label } from "orca/components/ui/label";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger
+} from "orca/components/ui/popover";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Service } from "service";
 import { Endpoint } from "service/endpoint";
-import { CreateModal } from "components/create_modal";
-import { PlusOutlined } from "@ant-design/icons";
-import { PageHeader } from "components/page_header";
+// import { Button } from "@material-tailwind/react";
 
 interface DataType {
   key: string;
@@ -27,9 +36,7 @@ export const TestSuiteDashboard: React.FC = () => {
       dataIndex: "name",
       key: "name",
       render: (text, record) => (
-        <Button type="link" onClick={() => onHandleClick(record)}>
-          {text}
-        </Button>
+        <Button onClick={() => onHandleClick(record)}>{text}</Button>
       )
     },
     {
@@ -43,9 +50,7 @@ export const TestSuiteDashboard: React.FC = () => {
       render: (record) => {
         return (
           <Space size="middle">
-            <Button type="primary" onClick={() => onHandleClick(record)}>
-              Edit
-            </Button>
+            <Button onClick={() => onHandleClick(record)}>Edit</Button>
             <Popconfirm
               title="Delete the Test Suite"
               description="Are you sure to delete this Test Suite?"
@@ -53,9 +58,7 @@ export const TestSuiteDashboard: React.FC = () => {
               okText="Yes"
               cancelText="No"
             >
-              <Button danger type="primary">
-                Delete
-              </Button>
+              <Button>Delete</Button>
             </Popconfirm>
           </Space>
         );
@@ -120,11 +123,22 @@ export const TestSuiteDashboard: React.FC = () => {
     <>
       <PageHeader
         title="Test Suite"
-        extra={
-          <Button type="primary" onClick={() => setIsCreateModalOpen(true)}>
-            <PlusOutlined />
-          </Button>
-        }
+        extra={[
+          <Button onClick={() => setIsCreateModalOpen(true)}>
+            <PlusOutlined /> New
+          </Button>,
+          <Popover>
+            <PopoverTrigger>Open</PopoverTrigger>
+            <PopoverContent>
+              <div className="newForm">
+                <Label htmlFor="nameOfSuit">Name of Suit</Label>
+                <Input id="nameOfSuit" type="text" />
+                <Label htmlFor="desc">Description</Label>
+                <Input id="desc" type="text" placeholder="Description" />
+              </div>
+            </PopoverContent>
+          </Popover>
+        ]}
       />
       <Table columns={columns} dataSource={dataSource} rowKey="name" />
       <div>

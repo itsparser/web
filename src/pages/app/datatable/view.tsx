@@ -1,3 +1,4 @@
+import { Select } from "@/components/select";
 import { IdentificationIcon } from "@heroicons/react/20/solid";
 import { PlusIcon } from "@heroicons/react/24/outline";
 import {
@@ -9,7 +10,6 @@ import {
   Typography
 } from "@material-tailwind/react";
 import { AppHeader } from "components/header";
-import { Select } from "components/select";
 import EditableTable, { ColumnField } from "components/table/edit";
 import React, { ChangeEvent, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";

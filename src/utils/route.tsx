@@ -96,7 +96,7 @@ export const ROUTES = [
             path: ":appId/actiongroup/:actionGroupId",
             component: () => {
               const { ActionGroup } = lazily(
-                () => import("../pages/app/action_group/actiongroup")
+                () => import("../pages/app/action_group/item")
               );
               return ActionGroup;
             }
